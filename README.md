@@ -126,9 +126,11 @@ There are only two small steps we need to do before we can deploy our Flask app 
 
 **1) Tell it how to run the server**
 
-Run `echo web: gunicorn app:app > Procfile`
+Create a file in your project folder called `Procfile`. 
 
-This will create a file in your project directory called Procfile. You can check it out. This file tells Heroku to use [gunicorn](https://gunicorn.org/) (the package we installed earlier) as a web server for our application. 
+Add the following line to it: `web: gunicorn app:app`
+
+That's it. This file tells Heroku to use [gunicorn](https://gunicorn.org/) (the package we installed earlier) as a web server for our application. 
 
 **2) Set up our Postgres database on Heroku**
 
@@ -157,6 +159,8 @@ The function `os.environ.get('DATABASE_URL')` tries to get an environment variab
 
 >**Important side note:** You may have gotten confused by `.replace("://", "ql://", 1)`. That's a workaround because of an update in the sqlalchemy library and a mismatch with the way Heroku configures its Postgres database. You can read about it [here](https://stackoverflow.com/questions/66690321/flask-and-heroku-sqlalchemy-exc-nosuchmoduleerror-cant-load-plugin-sqlalchemy).
 
+Now, there is one last step required for Heroku to properly run Postgres with your application. You have to add `psycopg2==2.8.6` to your "requirements.txt" file. This is a package Heroku needs to run properly and without much additional set up you won't be able to install it locally.
+
 
 #### Deployment (finally!)
 
@@ -169,5 +173,21 @@ git push heroku master
 _or if you're using `main` you run `git push heroku main`_
 
 (If you set up Heroku before running `git init` follow [these steps](https://devcenter.heroku.com/articles/git) to set up your Heroku remote)
+
+The very first time you delpoy your app you have to initialize your database again the same way you did it locally before. On Heorku you do it with the following commands:
+
+```
+heroku run python
+```
+
+Now you are in the python console but on the Heroku server. Here run: 
+
+```
+from app import db
+db.create_all()
+exit()
+```
+
+(You will have to repeat these steps every time you change something about your database set up.)
 
 And that's it! Your app is live on Heroku! The CLI will return a URL like this one "https://sheltered-anchorage-06094.herokuapp.com/" which is the URL of your application. You can click it and should see your application live. 
