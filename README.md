@@ -41,10 +41,11 @@ Your Command Prompt should now show the name of your project in parentheses. Exa
 Now, let's install all packages that we need: 
 
 ```sh
-pip3 install -r requirements.txt
+pip3 install flask flask-sqlalchemy gunicorn
+pip3 freeze > requirements.txt
 ```
 
-This will install the main three packages we need:
+This will install the main three packages we need and writes it to the requirements.txt file:
 
 * `flask` (Flask framework for our application)
 * `flask-sqlalchemy` (This will help us interact with our database in Python much more comfortably)
