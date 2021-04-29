@@ -1,0 +1,33 @@
+{% extends '_base.html' %}
+
+{% block head %}
+  <title>Simple List</title>
+{% endblock %}
+
+{% block body %}
+  <header>
+    <h1>Welcome 👋!</h1>
+  </header>
+
+  <main>
+    {% if tasks|length < 1 %}
+      <strong>Add a task below to get started.</strong>
+    {% endif %}
+
+    <ul>
+      {% for task in tasks %}
+        <li>
+          <strong>{{ task.content }}</strong> - <small>{{ task.date_created.date() }}</small>
+          <br>
+          <a href="/todos/{{task.id}}/delete">delete</a>
+          <a href="/todos/{{task.id}}/update">update</a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <form action="/todos" method="POST">
+      <input type="text" name="content" placeholder="Task" id="content" />
+      <input type="submit" value="Submit Task" />
+    </form>
+  </main>
+{% endblock %}
